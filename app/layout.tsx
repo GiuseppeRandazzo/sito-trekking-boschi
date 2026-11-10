@@ -13,9 +13,9 @@ const dmSans = DM_Sans({
 })
 
 export const metadata: Metadata = {
-  title: 'Faggeta Alta | Trekking guidati nei boschi',
+  title: 'Wild Sicily · Outdoora | Tour Gravel, E-Bike & Trekking con GPS Vocale',
   description:
-    'Escursioni guidate in piccoli gruppi nella faggeta secolare dell’Alta Valle del Rio Scuro. Percorsi da mezza giornata e notti al rifugio.',
+    'Itinerari cicloturistici ed escursionistici in Sicilia: Pista Altomontana dell’Etna, Dorsale dei Nebrodi, Gole dell’Alcantara e Riserva dello Zingaro con navigazione GPS vocale.',
   generator: 'v0.app',
   icons: {
     icon: [

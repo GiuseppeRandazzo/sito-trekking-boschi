@@ -16,13 +16,13 @@ export function Guide() {
           </div>
           <div className="flex flex-col justify-center p-6 md:p-10">
             <p className="text-sm font-medium uppercase tracking-widest text-primary">La guida</p>
-            <h2 className="mt-2 text-balance text-3xl font-semibold">Marta, vent&apos;anni sugli stessi sentieri</h2>
+            <h2 className="mt-2 text-balance text-3xl font-semibold">Marta, vent&apos;anni tra l&apos;Etna e i Nebrodi</h2>
             <p className="mt-4 leading-relaxed text-muted-foreground">
-              &ldquo;Non porto le persone da nessuna parte: le accompagno ad ascoltare. Il bosco
-              parla piano, basta fermarsi dieci minuti e smettere di guardare il telefono.&rdquo;
+              &ldquo;Non porto le persone da nessuna parte: le accompagno ad ascoltare. Il vulcano e le
+              faggete siciliane parlano chiaro, basta fermarsi dieci minuti e smettere di guardare lo schermo.&rdquo;
             </p>
             <p className="mt-4 text-sm text-muted-foreground">
-              Guida ambientale escursionistica e primo soccorso in ambiente impervio.
+              Guida Ambientale Escursionistica (GAE Sicilia) e soccorso in ambiente vulcanico e montano.
             </p>
           </div>
         </div>
