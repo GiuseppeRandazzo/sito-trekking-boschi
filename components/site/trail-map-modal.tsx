@@ -1,17 +1,20 @@
 'use client'
 
 import React, { useState } from 'react'
+import { createPortal } from 'react-dom'
 import {
   X,
   MapPin,
   Volume2,
   Download,
+  Check,
   Smartphone,
   TrendingUp,
   Navigation,
   Compass,
 } from 'lucide-react'
 import type { Trail, WaypointData } from '@/lib/trails'
+import { downloadTrailGpx } from '@/lib/gpx-generator'
 
 interface Props {
   trail: Trail
@@ -22,6 +25,13 @@ export function TrailMapModal({ trail, onClose }: Props) {
   const [selectedWaypoint, setSelectedWaypoint] = useState<WaypointData | null>(
     trail.waypoints[0] || null
   )
+  const [gpxDownloaded, setGpxDownloaded] = useState(false)
+
+  const handleDownloadGpx = () => {
+    downloadTrailGpx(trail)
+    setGpxDownloaded(true)
+    window.setTimeout(() => setGpxDownloaded(false), 2500)
+  }
 
   // Calcolo punti SVG per il profilo altimetrico
   const profile = trail.elevationProfile
@@ -44,7 +54,7 @@ export function TrailMapModal({ trail, onClose }: Props) {
     })
     .join(' ')
 
-  return (
+  const modalContent = (
     <div
       className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 p-4 backdrop-blur-md"
       role="dialog"
@@ -220,15 +230,21 @@ export function TrailMapModal({ trail, onClose }: Props) {
             <span>Compatibile con Garmin, Wahoo e App Outdoora GPS</span>
           </div>
           <div className="flex items-center gap-2.5">
-            <a
-              href={trail.gpxUrl}
-              download
-              target="_blank"
-              rel="noreferrer"
+            <button
+              type="button"
+              onClick={handleDownloadGpx}
               className="flex items-center gap-1.5 rounded-full border border-white/20 bg-white/5 px-4 py-2 text-xs font-medium text-white transition hover:bg-white/15"
             >
-              <Download className="size-3.5" /> Scarica Traccia GPX
-            </a>
+              {gpxDownloaded ? (
+                <>
+                  <Check className="size-3.5 text-primary" /> Traccia .gpx scaricata
+                </>
+              ) : (
+                <>
+                  <Download className="size-3.5" /> Scarica Traccia GPX
+                </>
+              )}
+            </button>
             <button
               type="button"
               onClick={onClose}
@@ -241,4 +257,7 @@ export function TrailMapModal({ trail, onClose }: Props) {
       </div>
     </div>
   )
+
+  if (typeof document === 'undefined') return null
+  return createPortal(modalContent, document.body)
 }

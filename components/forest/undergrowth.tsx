@@ -86,7 +86,8 @@ export function Undergrowth() {
   const spots = useMemo(
     () => ({
       ferns: scatter(650, 101, 1.7, 16),
-      grass: scatter(2200, 102, 1.5, 12),
+      grass: scatter(2000, 102, 1.5, 12),
+      ginestre: scatter(160, 106, 1.8, 15), // Ginestra dell'Etna (Genista aetnensis) con fiori giallo oro
       rocksA: scatter(55, 103, 2.2, 15),
       rocksB: scatter(55, 104, 2.2, 15),
       logs: scatter(12, 105, 3, 12),
@@ -96,6 +97,7 @@ export function Undergrowth() {
 
   const fernRef = useRef<InstancedMesh>(null)
   const grassRef = useRef<InstancedMesh>(null)
+  const ginestraRef = useRef<InstancedMesh>(null)
   const rockARef = useRef<InstancedMesh>(null)
   const rockBRef = useRef<InstancedMesh>(null)
   const logRef = useRef<InstancedMesh>(null)
@@ -115,12 +117,36 @@ export function Undergrowth() {
       (s) => [s.s, s.s * (0.9 + s.tint * 0.5), s.s],
       (s, c) => c.setRGB(0.85 + 0.25 * s.tint, 1, 0.8),
     )
+    // Ginestra dell'Etna: ciuffi dorati tipici dei versanti vulcanici
+    fill(
+      ginestraRef.current,
+      spots.ginestre,
+      (s) => [s.s * 1.3, s.s * (1.6 + s.tint * 0.7), s.s * 1.3],
+      (s, c) => c.setRGB(1.0, 0.82 + s.tint * 0.12, 0.12),
+      0,
+      0.15,
+    )
     const rockScale = (s: Spot): [number, number, number] => {
       const r = 0.25 + s.s * s.s * 0.45
       return [r * (1 + s.tint * 0.4), r, r * (1.3 - s.tint * 0.3)]
     }
-    fill(rockARef.current, spots.rocksA, rockScale, (_s, c) => c.setRGB(1, 1, 1), 0.2, 0.3)
-    fill(rockBRef.current, spots.rocksB, rockScale, (_s, c) => c.setRGB(1, 1, 1), 0.2, 0.3)
+    // Basalto lavico scuro dell'Etna
+    fill(
+      rockARef.current,
+      spots.rocksA,
+      rockScale,
+      (_s, c) => c.setRGB(0.22 + _s.tint * 0.08, 0.22 + _s.tint * 0.08, 0.24 + _s.tint * 0.08),
+      0.2,
+      0.3,
+    )
+    fill(
+      rockBRef.current,
+      spots.rocksB,
+      rockScale,
+      (_s, c) => c.setRGB(0.19 + _s.tint * 0.06, 0.19 + _s.tint * 0.06, 0.21 + _s.tint * 0.06),
+      0.2,
+      0.3,
+    )
 
     const logScale = (s: Spot): [number, number, number] => [
       0.22 + s.tint * 0.14,
@@ -181,6 +207,25 @@ export function Undergrowth() {
           alphaToCoverage
           side={DoubleSide}
           roughness={1}
+        />
+      </instancedMesh>
+
+      {/* Ginestra dell'Etna con fioritura giallo oro */}
+      <instancedMesh
+        ref={ginestraRef}
+        args={[undefined, undefined, spots.ginestre.length]}
+        frustumCulled={false}
+        receiveShadow
+      >
+        <primitive object={assets.grassGeo} attach="geometry" />
+        <meshStandardMaterial
+          map={assets.grass.map}
+          alphaMap={assets.grass.alphaMap}
+          vertexColors
+          alphaTest={0.5}
+          alphaToCoverage
+          side={DoubleSide}
+          roughness={0.8}
         />
       </instancedMesh>
 

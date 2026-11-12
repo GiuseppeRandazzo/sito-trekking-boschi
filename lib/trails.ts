@@ -6,6 +6,8 @@ export type WaypointData = {
   poiTypeLabel: string
   km: number
   elevation: number
+  lat?: number
+  lng?: number
   hasAudio: boolean
 }
 
@@ -25,6 +27,7 @@ export type Trail = {
   startingPoint: string
   bikeRentalAvailable: boolean
   gpxUrl: string
+  coordinates: [number, number, number][]
   waypoints: WaypointData[]
   elevationProfile: { km: number; elevation: number }[]
 }
@@ -45,6 +48,16 @@ export const trails: Trail[] = [
     startingPoint: 'Rifugio Sapienza / Piano Vetore (Nicolosi)',
     bikeRentalAvailable: true,
     gpxUrl: 'https://outdoora-assets.s3.eu-south-1.amazonaws.com/gpx/altomontana-etna.gpx',
+    coordinates: [
+      [14.982, 37.698, 1740],
+      [14.945, 37.721, 1820],
+      [14.928, 37.749, 1875],
+      [14.935, 37.785, 1810],
+      [14.972, 37.81, 1745],
+      [15.015, 37.822, 1840],
+      [15.042, 37.795, 1800],
+      [14.982, 37.698, 1740],
+    ],
     description:
       'L’itinerario gravel per eccellenza in Sicilia. Un anello leggendario su piste battute e basalto lavico tra pini larici, colate storiche e rifugi alpini attorno ai crateri sommitali.',
     waypoints: [
@@ -56,6 +69,8 @@ export const trails: Trail[] = [
         poiTypeLabel: 'Rifugio Vulcanico',
         km: 8.4,
         elevation: 1875,
+        lat: 37.749,
+        lng: 14.928,
         hasAudio: true,
       },
       {
@@ -66,6 +81,8 @@ export const trails: Trail[] = [
         poiTypeLabel: 'Tunnel Lavico Naturale',
         km: 21.3,
         elevation: 1745,
+        lat: 37.81,
+        lng: 14.972,
         hasAudio: true,
       },
       {
@@ -76,6 +93,8 @@ export const trails: Trail[] = [
         poiTypeLabel: 'Faggeta Secolare & Panorama',
         km: 28.6,
         elevation: 1840,
+        lat: 37.822,
+        lng: 15.015,
         hasAudio: true,
       },
     ],
@@ -103,6 +122,14 @@ export const trails: Trail[] = [
     startingPoint: 'Portella Femmina Morta (Cesarò)',
     bikeRentalAvailable: true,
     gpxUrl: 'https://outdoora-assets.s3.eu-south-1.amazonaws.com/gpx/nebrodi-maulazzo.gpx',
+    coordinates: [
+      [14.652, 37.915, 1524],
+      [14.668, 37.925, 1440],
+      [14.695, 37.938, 1680],
+      [14.698, 37.942, 1847],
+      [14.675, 37.93, 1610],
+      [14.652, 37.915, 1524],
+    ],
     description:
       'Immergiti nella foresta più grande della Sicilia in sella a una E-MTB. Strade forestali d’alta quota, cavalli Sanfratellani al pascolo e il riflesso verde smeraldo del Lago Maulazzo.',
     waypoints: [
@@ -114,6 +141,8 @@ export const trails: Trail[] = [
         poiTypeLabel: 'Lago & Bosco di Faggi',
         km: 7.5,
         elevation: 1440,
+        lat: 37.925,
+        lng: 14.668,
         hasAudio: true,
       },
       {
@@ -124,6 +153,8 @@ export const trails: Trail[] = [
         poiTypeLabel: 'Tetto dei Nebrodi',
         km: 15.8,
         elevation: 1847,
+        lat: 37.942,
+        lng: 14.698,
         hasAudio: true,
       },
       {
@@ -134,6 +165,8 @@ export const trails: Trail[] = [
         poiTypeLabel: 'Sorgente d’Acqua',
         km: 24.2,
         elevation: 1520,
+        lat: 37.93,
+        lng: 14.675,
         hasAudio: false,
       },
     ],
@@ -160,6 +193,13 @@ export const trails: Trail[] = [
     startingPoint: 'Francavilla di Sicilia / Castiglione',
     bikeRentalAvailable: false,
     gpxUrl: 'https://outdoora-assets.s3.eu-south-1.amazonaws.com/gpx/gole-alcantara.gpx',
+    coordinates: [
+      [15.132, 37.895, 330],
+      [15.148, 37.886, 330],
+      [15.165, 37.88, 420],
+      [15.178, 37.876, 310],
+      [15.132, 37.895, 330],
+    ],
     description:
       'Un’avventura a piedi tra le pareti prismatiche di basalto vulcanico raffreddate dal fiume. Bagni nelle pozze d’acqua limpida (gurne) e profumo di zagare negli agrumeti secolari.',
     waypoints: [
@@ -171,6 +211,8 @@ export const trails: Trail[] = [
         poiTypeLabel: 'Piscine Naturali',
         km: 3.2,
         elevation: 330,
+        lat: 37.886,
+        lng: 15.148,
         hasAudio: true,
       },
       {
@@ -181,6 +223,8 @@ export const trails: Trail[] = [
         poiTypeLabel: 'Patrimonio Storico Siciliano',
         km: 6.0,
         elevation: 370,
+        lat: 37.88,
+        lng: 15.165,
         hasAudio: true,
       },
       {
@@ -191,6 +235,8 @@ export const trails: Trail[] = [
         poiTypeLabel: 'Monumento Geologico',
         km: 8.8,
         elevation: 310,
+        lat: 37.876,
+        lng: 15.178,
         hasAudio: true,
       },
     ],
@@ -217,6 +263,12 @@ export const trails: Trail[] = [
     startingPoint: 'Ingresso Sud - Tonnara di Scopello (Castellammare del Golfo)',
     bikeRentalAvailable: false,
     gpxUrl: 'https://outdoora-assets.s3.eu-south-1.amazonaws.com/gpx/riserva-zingaro.gpx',
+    coordinates: [
+      [12.822, 38.075, 40],
+      [12.818, 38.09, 15],
+      [12.805, 38.115, 320],
+      [12.79, 38.14, 20],
+    ],
     description:
       'Il trekking costiero più iconico della Sicilia occidentale. Sentiero affacciato sul mare turchese tra palme nane, calette solitarie di ciottoli bianchi e profumo di finocchietto selvatico.',
     waypoints: [
@@ -228,6 +280,8 @@ export const trails: Trail[] = [
         poiTypeLabel: 'Caletta Naturale',
         km: 2.2,
         elevation: 15,
+        lat: 38.09,
+        lng: 12.818,
         hasAudio: true,
       },
       {
@@ -238,6 +292,8 @@ export const trails: Trail[] = [
         poiTypeLabel: 'Borgo Rurale Tradizionale',
         km: 7.8,
         elevation: 320,
+        lat: 38.115,
+        lng: 12.805,
         hasAudio: true,
       },
     ],
@@ -264,6 +320,13 @@ export const trails: Trail[] = [
     startingPoint: 'Stazione di Cassaro-Ferla / Valle Anapo',
     bikeRentalAvailable: true,
     gpxUrl: 'https://outdoora-assets.s3.eu-south-1.amazonaws.com/gpx/pantalica-anapo.gpx',
+    coordinates: [
+      [15.012, 37.125, 220],
+      [15.035, 37.138, 260],
+      [15.06, 37.142, 340],
+      [15.045, 37.135, 290],
+      [15.012, 37.125, 220],
+    ],
     description:
       'Un itinerario magico sull’ex ferrovia a scartamento ridotto Siracusa-Vizzini. Pedalando lungo il torrente Anapo attraverserai gallerie nella roccia viva sotto oltre cinquemila tombe rupestri Patrimonio UNESCO.',
     waypoints: [
@@ -275,6 +338,8 @@ export const trails: Trail[] = [
         poiTypeLabel: 'Ex Ferrovia Storica',
         km: 6.5,
         elevation: 260,
+        lat: 37.138,
+        lng: 15.035,
         hasAudio: true,
       },
       {
@@ -285,6 +350,8 @@ export const trails: Trail[] = [
         poiTypeLabel: 'Sito UNESCO Patrimonio Umanità',
         km: 14.0,
         elevation: 340,
+        lat: 37.142,
+        lng: 15.06,
         hasAudio: true,
       },
     ],

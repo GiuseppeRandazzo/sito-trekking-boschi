@@ -14,6 +14,7 @@ import { LightShafts } from './light-shafts'
 import { SkyDome } from './sky-dome'
 import { Trees } from './trees'
 import { Undergrowth } from './undergrowth'
+import { ExploreCamera } from './forest-explorer'
 
 function Fireflies() {
   const group = useRef<Group>(null)
@@ -54,22 +55,33 @@ function CameraRig({ smooth }: { smooth: MutableRefObject<number> }) {
 export function Scene({
   progress,
   lowQuality = false,
-  explore = false,
+  isExploring = false,
+  isLocked = false,
+  onUnlock,
 }: {
   progress: RefObject<number>
   lowQuality?: boolean
-  explore?: boolean
+  isExploring?: boolean
+  isLocked?: boolean
+  onUnlock?: () => void
 }) {
   const smooth = useRef(0)
 
   useFrame((_, dt) => {
-    smooth.current += ((progress.current ?? 0) - smooth.current) * Math.min(1, dt * 2.5)
+    const target = isExploring ? 0.35 : (progress.current ?? 0)
+    smooth.current += (target - smooth.current) * Math.min(1, dt * 2.5)
   })
 
   return (
     <>
       <Atmosphere smooth={smooth} />
-      {!explore && <CameraRig smooth={smooth} />}
+      {!isExploring && <CameraRig smooth={smooth} />}
+      {isExploring && (
+        <ExploreCamera
+          active={isLocked}
+          onUnlock={onUnlock || (() => {})}
+        />
+      )}
       <SkyDome />
       <Ground />
       <Trees />

@@ -18,9 +18,10 @@ export function Ground() {
     const colors = new Float32Array(pos.count * 3)
     const grass = new Color('#2c5236')
     const moss = new Color('#4a7544')
-    const earth = new Color('#6b5236')
+    const basalt = new Color('#202326') // Basalto e lapilli dell'Etna
+    const earth = new Color('#5a4430')
     const leaf = new Color('#8a5a2b')
-    const needles = new Color('#4d3a26')
+    const needles = new Color('#3d2c1c')
     const c = new Color()
     for (let i = 0; i < pos.count; i++) {
       const x = pos.getX(i)
@@ -29,8 +30,9 @@ export function Ground() {
       pos.setY(i, heightAt(x, z, d))
       const n = 0.5 + 0.5 * Math.sin(x * 0.7) * Math.sin(z * 0.9)
       const patch = 0.5 + 0.5 * Math.sin(x * 0.19 + 2.1) * Math.cos(z * 0.23 - 0.7)
-      c.copy(grass).lerp(moss, n * 0.7)
+      c.copy(grass).lerp(moss, n * 0.65)
       c.lerp(needles, patch * 0.45)
+      c.lerp(basalt, MathUtils.smoothstep(d, 0.4, 3.2) * (patch * 0.5))
       c.lerp(leaf, MathUtils.smoothstep(d, 2, 5) * (1 - MathUtils.smoothstep(d, 5, 9)) * 0.35 * n)
       c.lerp(earth, 1 - MathUtils.smoothstep(d, 0.9, 2.2))
       colors[i * 3] = c.r

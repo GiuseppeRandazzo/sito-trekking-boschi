@@ -15,11 +15,11 @@ import {
 import { atmosphere } from '@/lib/atmosphere-state'
 import { hutPosition } from '@/lib/forest-data'
 
-const FOG_DAWN = new Color('#4e7466')
-const FOG_NIGHT = new Color('#0a1816')
-const TOP_DAWN = new Color('#7fa3b0')
+const FOG_DAWN = new Color('#3b5e52')
+const FOG_NIGHT = new Color('#091614')
+const TOP_DAWN = new Color('#4b86ad')
 const TOP_NIGHT = new Color('#050b14')
-const SUN_DAWN = new Color('#ffd9a0')
+const SUN_DAWN = new Color('#ffe09e')
 const SUN_NIGHT = new Color('#7f9bd4')
 
 const forward = new Vector3()

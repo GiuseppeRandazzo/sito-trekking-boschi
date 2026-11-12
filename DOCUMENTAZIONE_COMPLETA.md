@@ -135,28 +135,29 @@ Il catalogo comprende 5 tour iconici georeferenziati con tracce GPX, altimetria 
 
 ## 5. La Scena 3D Immersiva e Procedurale (Three.js & R3F)
 
-La caratteristica tecnica più spettacolare del sito è la scena 3D renderizzata in WebGL via `@react-three/fiber` e Three.js.
+La caratteristica tecnica più spettacolare del sito è la scena 3D renderizzata in WebGL via `@react-three/fiber` e Three.js, adattata per ricreare l'ambiente naturale dei **boschi siciliani** (Etna e Nebrodi).
 
-### 4.1 Meccanica dello Scroll Cinematico (`components/forest/forest-canvas.tsx` & `scene.tsx`)
-* Lo sfondo è un elemento `<Canvas>` fisso a schermo intero (`fixed inset-0 z-0`).
+### 5.1 Meccanica dello Scroll Cinematico (`components/forest/forest-canvas.tsx` & `scene.tsx`)
+* Lo sfondo è un elemento `<Canvas>` unico a schermo intero (`fixed inset-0`).
 * Un listener di scroll calcola il progresso continuo `window.scrollY / maxScroll` compreso tra 0 e 1.
 * Nel ciclo di rendering (`useFrame`), una telecamera virtuale interpola la propria posizione lungo una spline tridimensionale (`CatmullRomCurve3` definita in `lib/forest-data.ts`).
 * Man mano che l'utente scorre la pagina, la telecamera "cammina" lungo il sentiero, con un leggero beccheggio naturale del passo (*head bobbing*), fino ad arrivare al rifugio illuminato da una lanterna a fine pagina.
 
-### 4.2 Generazione Procedurale ad Alte Prestazioni
-* **Zero modelli pesanti da scaricare**: tronchi, rami e fogliame (`lib/tree-geometry.ts`) vengono generati via codice all'avvio.
-* **Texture Procedurali Canvas 2D (`lib/procedural-textures.ts`)**: le cortecce di faggio e pino e le texture delle foglie sono generate proceduralmente con algoritmi di rumore su canvas HTML nascosti convertiti in texture WebGL.
-* **InstancedMesh (`components/forest/trees.tsx`)**: centinaia di alberi vengono disegnati con una singola chiamata alla GPU (*draw call*) grazie al rendering istanziato, garantendo 60 FPS stabili.
-* **Post-Processing Cinematico**:
-  * **Bloom**: per creare l'effetto alone caldo della lanterna e dei raggi di sole tra i rami.
-  * **Vignette**: per focalizzare l'attenzione al centro dello schermo.
-  * **Tone Mapping ACES Filmic**: per una resa cromatica fotografica da cinema.
-* **Lucciole e Particelle**: componenti `Sparkles` fluttuanti attorno alla telecamera per evocare la magia della foresta.
+### 5.2 Ambientazione Siciliana & Generazione Procedurale
+* **Botanica e Geologia Siciliana (`ground.tsx` & `undergrowth.tsx`)**:
+  * **Terreno Vulcanico**: sfumature di basalto e lapilli scuri dell'Etna lungo il sentiero miscelati a muschio e aghi di pino.
+  * **Ginestra dell'Etna (*Genista aetnensis*)**: 160 cespugli con fioritura giallo oro brillante sparsi lungo il percorso.
+  * **Rocce Basaltiche**: massi lavici scuri ad alta porosità.
+  * **Pini Larici e Faggi**: alberi vetusti tipici di Ragabo, Timparossa e dei Nebrodi.
+  * **Atmosfera Mediterranea (`atmosphere.tsx`)**: cielo azzurro limpido e luce solare calda e dorata.
+* **Zero modelli pesanti da scaricare**: tronchi, rami e fogliame (`lib/tree-geometry.ts`) e texture Canvas 2D (`lib/procedural-textures.ts`) vengono generati proceduralmente all'avvio.
+* **InstancedMesh (`components/forest/trees.tsx`)**: centinaia di alberi e arbusti disegnati con pochissime *draw call* alla GPU, garantendo 60 FPS stabili.
+* **Post-Processing Cinematico**: *Bloom* (bagliore lanterna/sole), *Vignette* e *Tone Mapping ACES Filmic*.
 
 ### 5.3 Modalità Esplorazione Libera in Prima Persona (`components/forest/forest-explorer.tsx`)
-* Cliccando sul pulsante nell'Hero, si apre una modale 3D interattiva.
-* Attiva il componente `PointerLockControls` che cattura il puntatore del mouse.
-* L'utente può esplorare liberamente il bosco usando i tasti **W, A, S, D** o le **frecce direzionali** per muoversi e il mouse per orientare lo sguardo a 360°, con limiti fisici di collisione sul terreno.
+* **Architettura a Canvas Unico (`lib/explorer-state.ts`)**: il passaggio tra scroll e gioco 3D avviene sullo stesso contesto WebGL per garantire zero latenza e nessun conflitto sulle texture GPU.
+* **Fisica sul Terreno**: la telecamera in prima persona calcola dinamicamente ad ogni frame `heightAt(x, z) + 1.75` mantenendo sempre l'altezza degli occhi al di sopra delle colline del sentiero.
+* **Controlli FPS**: `PointerLockControls` per guardarsi intorno a 360° col mouse e tasti **W, A, S, D** o frecce direzionali per camminare liberamente.
 
 ---
 
