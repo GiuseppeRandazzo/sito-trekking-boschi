@@ -1,7 +1,7 @@
 'use client'
 
 import { useFrame, useThree } from '@react-three/fiber'
-import { useEffect, useRef } from 'react'
+import { useCallback, useEffect, useRef } from 'react'
 import { Compass, Eye, Trees as TreesIcon, X } from 'lucide-react'
 import { Euler, Vector3 } from 'three'
 import { useExplorer } from '@/lib/explorer-state'
@@ -27,6 +27,8 @@ export function ExploreCamera({
   const isDragging = useRef(false)
   const wasPointerLocked = useRef(false)
   const lastPointer = useRef({ x: 0, y: 0 })
+  const onUnlockRef = useRef(onUnlock)
+  onUnlockRef.current = onUnlock
 
   // Inizializza la posizione della telecamera a livello degli occhi sul sentiero
   useEffect(() => {
@@ -45,7 +47,7 @@ export function ExploreCamera({
     const down = (event: KeyboardEvent) => {
       keys.current[event.code] = true
       if (event.code === 'Escape' && active && !document.pointerLockElement) {
-        onUnlock()
+        onUnlockRef.current()
       }
     }
     const up = (event: KeyboardEvent) => {
@@ -66,8 +68,8 @@ export function ExploreCamera({
 
     const onPointerLockChange = () => {
       const lockedToCanvas = document.pointerLockElement === dom
-      if (wasPointerLocked.current && !lockedToCanvas && active) {
-        onUnlock()
+      if (wasPointerLocked.current && !lockedToCanvas) {
+        onUnlockRef.current()
       }
       wasPointerLocked.current = lockedToCanvas
     }
@@ -114,7 +116,7 @@ export function ExploreCamera({
       window.removeEventListener('pointermove', onPointerMove)
       window.removeEventListener('pointerup', onPointerUp)
     }
-  }, [active, camera, gl, onUnlock])
+  }, [active, camera, gl])
 
   useEffect(() => {
     if (!active) {
@@ -185,6 +187,28 @@ export function ExplorerOverlay({
 }) {
   const { isExploring, stopExploring } = useExplorer()
 
+  const exitExploration = useCallback(() => {
+    if (document.pointerLockElement) {
+      try {
+        document.exitPointerLock()
+      } catch {}
+    }
+    setIsLocked(false)
+    stopExploring()
+  }, [setIsLocked, stopExploring])
+
+  // Consente di tornare alla pagina principale con Esc sia durante l'esplorazione che dalla schermata introduttiva
+  useEffect(() => {
+    if (!isExploring) return
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.code === 'Escape') {
+        exitExploration()
+      }
+    }
+    window.addEventListener('keydown', onKeyDown)
+    return () => window.removeEventListener('keydown', onKeyDown)
+  }, [isExploring, exitExploration])
+
   if (!isExploring) return null
 
   return (
@@ -207,15 +231,7 @@ export function ExplorerOverlay({
 
         <button
           type="button"
-          onClick={() => {
-            if (document.pointerLockElement) {
-              try {
-                document.exitPointerLock()
-              } catch {}
-            }
-            setIsLocked(false)
-            stopExploring()
-          }}
+          onClick={exitExploration}
           className="pointer-events-auto flex items-center gap-2 rounded-full border border-white/25 bg-black/60 px-5 py-2.5 text-sm font-semibold text-white backdrop-blur-md transition hover:bg-white/20 hover:scale-105 active:scale-95 shadow-xl"
         >
           <X className="size-4" /> Esci dal bosco
@@ -246,7 +262,7 @@ export function ExplorerOverlay({
             <div className="mt-5 rounded-2xl border border-white/10 bg-black/25 p-3 text-xs text-white/70 text-left space-y-1">
               <p>🎮 <strong>W A S D</strong> o frecce per camminare</p>
               <p>👀 <strong>Mouse</strong> (o trascina) per guardarti intorno a 360°</p>
-              <p>⌨️ <strong>Esc</strong> per liberare il puntatore</p>
+              <p>⌨️ <strong>Esc</strong> per uscire e tornare alla pagina principale</p>
             </div>
 
             <button
@@ -270,6 +286,13 @@ export function ExplorerOverlay({
               className="mt-6 flex w-full items-center justify-center gap-2 rounded-full bg-[#f1c56b] px-6 py-3.5 font-bold text-[#0c1a14] transition hover:brightness-110 shadow-lg hover:scale-[1.02] active:scale-[0.98]"
             >
               <Eye className="size-4" /> Entra nel bosco
+            </button>
+            <button
+              type="button"
+              onClick={exitExploration}
+              className="mt-2.5 w-full rounded-full border border-white/15 px-5 py-2.5 text-xs font-medium text-white/75 transition hover:bg-white/10 hover:text-white"
+            >
+              Torna alla pagina principale
             </button>
           </div>
         </div>

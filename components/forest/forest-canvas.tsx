@@ -10,7 +10,7 @@ import { ExplorerOverlay } from './forest-explorer'
 export function ForestCanvas() {
   const progress = useRef(0)
   const [lowQuality, setLowQuality] = useState(false)
-  const { isExploring } = useExplorer()
+  const { isExploring, stopExploring } = useExplorer()
   const [isLocked, setIsLocked] = useState(false)
 
   useEffect(() => {
@@ -54,7 +54,10 @@ export function ForestCanvas() {
             lowQuality={lowQuality}
             isExploring={isExploring}
             isLocked={isLocked}
-            onUnlock={() => setIsLocked(false)}
+            onUnlock={() => {
+              setIsLocked(false)
+              stopExploring()
+            }}
           />
         </Canvas>
       </div>

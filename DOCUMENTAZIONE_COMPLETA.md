@@ -68,7 +68,7 @@ L'applicazione web è una *Single Page Application* con routing avanzato in Next
 
 ### 3.1 Header Fisso (`components/site/header.tsx`)
 * Barra di navigazione trasparente con effetto *blur* e gradiente scuro.
-* Include il brand "Faggeta Alta · Outdoora Experience", i link di ancoraggio rapido (`#percorsi`, `#metodo`, `#guida`, `#rifugio`, `#prenota`).
+* Include il brand **"Wild Sicily · Outdoora Experience"**, i link di ancoraggio rapido (`#percorsi`, `#metodo`, `#guida`, `#rifugio`).
 * Pulsante interattivo **"Outdoora Stack"** che apre la modale descrittiva dell'architettura tecnica per i selezionatori.
 
 ### 3.2 Sezione Hero (`components/site/hero.tsx`)
@@ -155,19 +155,20 @@ La caratteristica tecnica più spettacolare del sito è la scena 3D renderizzata
 * **Post-Processing Cinematico**: *Bloom* (bagliore lanterna/sole), *Vignette* e *Tone Mapping ACES Filmic*.
 
 ### 5.3 Modalità Esplorazione Libera in Prima Persona (`components/forest/forest-explorer.tsx`)
-* **Architettura a Canvas Unico (`lib/explorer-state.ts`)**: il passaggio tra scroll e gioco 3D avviene sullo stesso contesto WebGL per garantire zero latenza e nessun conflitto sulle texture GPU.
-* **Fisica sul Terreno**: la telecamera in prima persona calcola dinamicamente ad ogni frame `heightAt(x, z) + 1.75` mantenendo sempre l'altezza degli occhi al di sopra delle colline del sentiero.
-* **Controlli FPS**: `PointerLockControls` per guardarsi intorno a 360° col mouse e tasti **W, A, S, D** o frecce direzionali per camminare liberamente.
+* **Architettura a Canvas Unico (`lib/explorer-state.ts`)**: il passaggio tra scroll e modalità esplorazione avviene sullo stesso contesto WebGL (`ForestCanvas`) per garantire zero latenza e nessun conflitto sulle texture GPU.
+* **Fisica sul Terreno**: la telecamera in prima persona proietta il movimento orizzontale rispetto alla visuale e calcola dinamicamente ad ogni frame `heightAt(x, z) + 1.75` mantenendo sempre l'altezza degli occhi al di sopra dei rilievi del sentiero.
+* **Controlli FPS & Uscita Immediata**: gestione diretta di **Pointer Lock** per guardarsi intorno a 360° col mouse (con fallback automatico a **trascinamento del mouse** se Pointer Lock non è disponibile), tasti **W, A, S, D** o frecce direzionali per camminare, e ritorno immediato alla pagina principale premendo **Esc** oppure cliccando *Esci dal bosco* / *Torna alla pagina principale*.
 
 ---
 
 ## 6. Visualizzatore GPX, Altimetria e Waypoints Audio
 
-Creato nel componente `components/site/trail-map-modal.tsx`:
+Realizzato in `components/site/trail-map-modal.tsx` insieme al generatore `lib/gpx-generator.ts`:
+* **Modale sopra-livello (`createPortal`)**: aperta su `document.body` per restare sempre sopra la barra di navigazione fissa.
 * **Traccia Vettoriale Interattiva**: visualizza la curva del sentiero e la dislocazione spaziale dei waypoint.
 * **Waypoints Cliccabili**: cliccando sui pin (Rifugio Galvarina, Grotta dei Lamponi, Lago Maulazzo, ecc.) vengono mostrate quota altimetrica, descrizione e indicatore della voce narrante.
 * **Profilo Altimetrico SVG**: diagramma vettoriale dinamico calcolato in base alle quote del percorso (+m dislivello vs km percorsi).
-* **Download Traccia GPX**: pulsante che consente all'utente di scaricare il file GPX per caricarlo sul proprio ciclocomputer (Garmin, Wahoo, Bryton) o aprirlo con l'app mobile.
+* **Download Traccia GPX 1.1 (`generateGpxXml` / `downloadTrailGpx`)**: genera dinamicamente nel browser un file `<slug>.gpx` standard completo di metadati, `<wpt>` geolocalizzati e tracciato `<trkseg>` interpolato dalle coordinate siciliane reali in `lib/trails.ts` (pronto per Garmin, Wahoo, Komoot e app Outdoora anche senza un bucket S3 configurato).
 
 ---
 
